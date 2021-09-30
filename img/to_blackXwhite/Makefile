@@ -7,17 +7,15 @@ CFLAGS= -Wall -Wextra -Werror -std=c99 -O3
 LDFLAGS=
 LDLIBS= `pkg-config --libs sdl` -lSDL_image
 
-all: display blackXwhite
+all: blackxwhite
 
-display: display.o
-grayscale: pixel_operations.o blackXwhite.o
+blackxwhite: pixel_operations.o blackxwhite.o
 
-grayscale.o: pixel_operations.h
+blackxwhite.o: pixel_operations.h
 
 clean:
 	${RM} *.o
 	${RM} *.d
-	${RM} display
-	${RM} blackXwhite
+	${RM} blackxwhite
 
 # END

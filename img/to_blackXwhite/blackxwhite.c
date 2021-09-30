@@ -64,8 +64,10 @@ void wait_for_keypressed()
 void SDL_FreeSurface(SDL_Surface *surface);
 
 
-int main()
+int main(int argc, char *argv[])
 {
+	if(argc>2)
+		exit(EXIT_FAILURE);
 	SDL_Surface* image_surface;
 	SDL_Surface* screen_surface;
 	int witdh;
@@ -73,15 +75,12 @@ int main()
 
 	
 
-    // TODO: Initialize the SDL
     	init_sdl();
-    	image_surface = load_image("img2.jpg");
-    	// TODO: Display the image.
+    	image_surface = load_image(argv[1]);
 	screen_surface = display_image(image_surface);
 	witdh = image_surface->w;
 	height = image_surface->h;
 	
-	// TODO: Wait for a key to be pressed.
 	
 	
 	wait_for_keypressed();
@@ -97,7 +96,11 @@ int main()
 			pixel = get_pixel(image_surface,x,y);
 			SDL_GetRGB(pixel,image_surface->format,&r,&g,&b);
 			av = 0.299*r + 0.59*g + 0.11*b;
-			pixel = (0xFF << 24 ) | ( av << 16 ) | ( av << 8 ) | av;
+			if(av>100)
+				pixel = (0x000000);
+			else pixel = (0xFFFFFF);
+				
+				//pixel = (0xFF << 24 ) | ( av << 16 ) | ( av << 8 ) | av;
 		       	put_pixel(image_surface,x,y,pixel);
 		}
 
@@ -108,13 +111,7 @@ int main()
 
 	wait_for_keypressed();
 
-
-
-
-
-    // TODO: Free the image surface.
 	SDL_FreeSurface(image_surface);
-    // TODO: Free the screen surface.
 	SDL_FreeSurface(screen_surface);
 
     return 0;
