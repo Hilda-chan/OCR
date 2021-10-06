@@ -62,10 +62,22 @@ void wait_for_keypressed()
 }
 void SDL_FreeSurface(SDL_Surface *surface);
 
+void print_img(SDL_Surface* image_surface)
+{
+   	SDL_Surface* image_surface;
+    SDL_Surface* screen_surface;
+    init_sdl();
+    image_surface = load_image("img.png");
+    screen_surface = display_image(image_surface);
+    wait_for_keypressed();
+    SDL_FreeSurface(image_surface);
+    SDL_FreeSurface(screen_surface);
+ 
+}
 
 int main()
 {
-	SDL_Surface* image_surface;
+	/*SDL_Surface* image_surface;
     	SDL_Surface* screen_surface;
 
     // TODO: Initialize the SDL
@@ -79,6 +91,6 @@ int main()
 	SDL_FreeSurface(image_surface);
     // TODO: Free the screen surface.
 	SDL_FreeSurface(screen_surface);
-
+    */
     return 0;
 }

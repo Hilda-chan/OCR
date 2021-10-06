@@ -1,4 +1,4 @@
-blackxwhite.o: blackxwhite.c /run/current-system/sw/include/stdc-predef.h \
+or_logic.o: or_logic.c /run/current-system/sw/include/stdc-predef.h \
  /run/current-system/sw/include/err.h \
  /run/current-system/sw/include/features.h \
  /run/current-system/sw/include/sys/cdefs.h \
