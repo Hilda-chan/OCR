@@ -4,14 +4,18 @@
 #include "pixel_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "blackxwhite.h"
+#include "or_logic.h"
 
-void init_sdl()
+/*void init_sdl()
 {
     // Init only the video part.
     // If it fails, die with an error message.
     if(SDL_Init(SDL_INIT_VIDEO) == -1)
         errx(1,"Could not initialize SDL: %s.\n", SDL_GetError());
 }
+
+
 SDL_Surface* load_image(char *path)
 {
     SDL_Surface *img;
@@ -24,6 +28,8 @@ SDL_Surface* load_image(char *path)
 
     return img;
 }
+
+
 SDL_Surface* display_image(SDL_Surface *img)
 {
     SDL_Surface *screen;
@@ -47,6 +53,8 @@ SDL_Surface* display_image(SDL_Surface *img)
     // return the screen for further uses
     return screen;
 }
+
+
 void wait_for_keypressed()
 {
     SDL_Event event;
@@ -63,89 +71,43 @@ void wait_for_keypressed()
         SDL_PollEvent(&event);
     } while(event.type != SDL_KEYUP);
 }
+
+
 void SDL_FreeSurface(SDL_Surface *surface);
 
+*/
 
-SDL_Surface* ET(char *img,char *img_ref)
+int main(int argc,char *argv[])
 {
-	SDL_Surface* image_surface;
-	SDL_Surface* screen_surface;
-    SDL_Surface* image_surface_ref;
-	
-    int witdh;
-	int height;
-
-	init_sdl();
-	image_surface = load_image(img);
-	screen_surface = display_image(image_surface);
-    image_surface_ref = load_image(img_ref);
-
-	witdh = image_surface->w;
-	height = image_surface->h;
-	
-	Uint32 pixel;
-    Uint32 pixel_ref;
-    Uint32 black = 0x000000;
-    Uint32 white = 0xffffff;
-
-    for(int x=0;x<witdh;x++)
-	{
-		for(int y=0;y<height;y++)
-		{
-			pixel = get_pixel(image_surface,x,y);
-            pixel_ref = get_pixel(image_surface_ref,x,y);
-            if(pixel != pixel_ref)
-                pixel = white;
-            else 
-                pixel = black;
-			put_pixel(image_surface,x,y,pixel);
-		}
-	}
-
-	update_surface(screen_surface,image_surface);
-	SDL_FreeSurface(image_surface);
-	SDL_FreeSurface(screen_surface);
+    if(argc!=2)
+        return EXIT_FAILURE;
+   SDL_Surface *img = load_image(argv[1]);
+    blackwhite(img);
     
-    return image_surface;
-}
 
-int percentage(char *img)
-{
-    SDL_Surface* image_surface;
-	//SDL_Surface* screen_surface;
-
-    int witdh;
-	int height;
-
-	init_sdl();
-	image_surface = load_image(img);
-    //screen_surface = display_image(image_surface);
-
-	witdh = image_surface->w;
-	height = image_surface->h;
-
-	Uint32 pixel;
-    Uint32 black = 0x000000;
-    int nb_black_pixel = 0;
-    int nb_pixel = witdh * height;
-
-	for(int x=0;x<witdh;x++)
-	{
-		for(int y=0;y<height;y++)
-		{
-			pixel = get_pixel(image_surface,x,y);
-			if(pixel == black)
-				nb_black_pixel++;
-		}
-    }
-    return nb_black_pixel/nb_pixel;
-}
-
-int main()
-{
     return 0;
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

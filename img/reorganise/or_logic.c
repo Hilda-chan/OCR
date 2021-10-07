@@ -4,8 +4,8 @@
 #include "pixel_operations.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-void init_sdl()
+#include "display.h"
+/*void init_sdl()
 {
     // Init only the video part.
     // If it fails, die with an error message.
@@ -65,7 +65,7 @@ void wait_for_keypressed()
 }
 void SDL_FreeSurface(SDL_Surface *surface);
 
-
+*/
 SDL_Surface* ET(char *img,char *img_ref)
 {
 	SDL_Surface* image_surface;
@@ -109,25 +109,23 @@ SDL_Surface* ET(char *img,char *img_ref)
     return image_surface;
 }
 
-int percentage(char *img)
+float percentage(char *img)
 {
     SDL_Surface* image_surface;
-	//SDL_Surface* screen_surface;
 
-    int witdh;
-	int height;
+    float witdh;
+	float height;
 
 	init_sdl();
 	image_surface = load_image(img);
-    //screen_surface = display_image(image_surface);
 
 	witdh = image_surface->w;
 	height = image_surface->h;
 
 	Uint32 pixel;
     Uint32 black = 0x000000;
-    int nb_black_pixel = 0;
-    int nb_pixel = witdh * height;
+    float nb_black_pixel = 0;
+    float nb_pixel = witdh * height;
 
 	for(int x=0;x<witdh;x++)
 	{
@@ -140,29 +138,3 @@ int percentage(char *img)
     }
     return nb_black_pixel/nb_pixel;
 }
-
-int main()
-{
-    return 0;
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

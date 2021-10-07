@@ -89,4 +89,5 @@ blackxwhite.o: blackxwhite.c /run/current-system/sw/include/stdc-predef.h \
  /run/current-system/sw/include/SDL/SDL_version.h \
  /run/current-system/sw/include/SDL/SDL_image.h \
  /run/current-system/sw/include/SDL/SDL.h pixel_operations.h \
- /nix/store/xlsziya381rra6hzbvw9nll33hmbdpil-SDL-1.2.15-dev/include/SDL/SDL.h
+ /nix/store/xlsziya381rra6hzbvw9nll33hmbdpil-SDL-1.2.15-dev/include/SDL/SDL.h \
+ display.c
