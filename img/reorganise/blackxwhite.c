@@ -24,9 +24,11 @@ SDL_Surface* blackwhite(SDL_Surface* image_surface,SDL_Surface* screen_surface)
 	Uint32 pixel;
 
 	for(int x=0;x<witdh;x++)
-	{
+
+{
 		for(int y=0;y<height;y++)
-		{
+
+{
 			pixel = get_pixel(image_surface,x,y);
 			SDL_GetRGB(pixel,image_surface->format,&r,&g,&b);
 			av = 0.299*r + 0.59*g + 0.11*b;
@@ -46,4 +48,33 @@ SDL_Surface* blackwhite(SDL_Surface* image_surface,SDL_Surface* screen_surface)
     return image_surface;
 }
 
+SDL_Surface* blackborder(SDL_Surface* image_surface,SDL_Surface* screen_surface)
+{
+    int witdh;
+    int height;
+	witdh = image_surface->w;
+	height = image_surface->h;
+
+	Uint32 pixel;
+
+	for(int x=0;x<witdh;x++)
+{
+    	for(int y=0;y<height;y++)
+        {
+            if(x==0 || y==0)
+            {
+                pixel = (0xff << 24) | (0x00) << 16 | (0x00 < 8) | 0xff;
+                put_pixel(image_surface,x,y,pixel);
+            }
+        }
+}
+
+	wait_for_keypressed();
+	update_surface(screen_surface,image_surface);
+	SDL_FreeSurface(image_surface);
+	SDL_FreeSurface(screen_surface);
+	wait_for_keypressed();
+
+    return image_surface;
+}
 

@@ -65,6 +65,7 @@ void SDL_FreeSurface(SDL_Surface *surface);
 
 
 int main()
+
 {
 	SDL_Surface* image_surface;
 	SDL_Surface* screen_surface;
@@ -118,4 +119,4 @@ int main()
 	SDL_FreeSurface(screen_surface);
 
     return 0;
-}
+
