@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <SDL/SDL_rotozoom.h>
 
 
 void init_sdl()
@@ -87,7 +88,7 @@ void Grayscale(SDL_Surface *image_surface)
 		{
 			pixel = get_pixel(image_surface,x,y);
 			SDL_GetRGB(pixel,image_surface->format,&r,&g,&b);
-			av = 0.299*r + 0.59*g + 0.11*b;
+			av = 0.3*r + 0.59*g + 0.11*b;
 			pixel = (0xFF << 24 ) | ( av << 16 ) | ( av << 8 ) | av;
 			put_pixel(image_surface,x,y,pixel);
 		}
@@ -147,67 +148,6 @@ void contrast(SDL_Surface *img)
 	SDL_SaveBMP(img, "ContrastedImage.bmp");
 }
 
-// Allow user to rotate image with given parameter
-void rotateMAN(int angle, SDL_Surface *img)
-{
-	SDL_LockSurface(img);
-
-	Uint32 pixel;
-	Uint8 r,g,b;
-
-	int w = img->w;
-	int h = img->h;
-	int mid = (w+h)/2;
-    int xs;
-    int ys;
-
-	double sinAngle = sin(M_PI * angle / 180.0);
-	double cosAngle = cos(M_PI * angle / 180.0);
-
-
-	SDL_Surface* result = SDL_CreateRGBSurface(0, w+h, w+h, 32,0,0,0,0);
-	for(int x = 0; x < img->w;x++)
-	{
-		for(int y = 0; y < img->h;y++)
-		{
-			pixel = get_pixel(img,x,y);
-			SDL_GetRGB(pixel, img-> format, &r,&g,&b);
-			pixel = SDL_MapRGB(img -> format,r,g,b);
-			xs = cosAngle*(x-w/2)-sinAngle*(y-h/2)+mid;
-			ys = sinAngle*(x-w/2)+cosAngle*(y-h/2)+mid;
-			put_pixel(result,abs(xs),abs(ys),pixel);
-		}
-	}
-
-	SDL_SaveBMP(result,"RotatedImage.bmp");
-	//SDL_UnlockSurface(img);
-	//*img = *result;
-}
-
-
-// Zoom into the grid into the grid only
-SDL_Surface* Zoom(SDL_Surface *img, int x1,int x2, int x3, int y1, int y4)
-{
-	Uint8 r,g,b;
-	Uint32 pixel;
-
-	SDL_Surface* result;
-
-    result = SDL_CreateRGBSurface(0,abs(x2-x3),abs(y1-y4),32,0,0,0,0);
-
-	for(int y = 0; y < abs(y1-y4); y++)
-	{
-		for(int x = 0; x < abs(x2-x3); x++)
-		{
-			pixel = get_pixel(img,x+x1,y+y1);
-			SDL_GetRGB(pixel,img -> format, &r,&g,&b);
-			pixel = SDL_MapRGB(img->format,r,g,b);
-			put_pixel(result,x,y,pixel);
-		}
-	}
-	SDL_SaveBMP(result,"GridOnly.bmp");
-	return result;
-}
 
 void SDL_FreeSurface(SDL_Surface *surface);
 
@@ -222,12 +162,9 @@ int main(int argc, char* argv[])
     SDL_Surface* grayscale;
     SDL_Surface* gamma;
     SDL_Surface* Contraste;
-
-    SDL_Surface* Zoomed;
-    SDL_Surface* Rotated;
+    SDL_Surface* ZoomedRotate;
 
     char* Name = argv[1];
-
 
     init_sdl();
     
@@ -235,11 +172,6 @@ int main(int argc, char* argv[])
     screen_surface = display_image(image_surface);
     
     wait_for_keypressed();
-    
-    // Black screen -> smooth transition
-    SDL_Surface* Black = SDL_CreateRGBSurface(0,image_surface->w,
-                                                image_surface->h,32,0,0,0,0);
-
     
     //Convert image to grayscale to reduce noises
     Grayscale(image_surface);
@@ -262,22 +194,14 @@ int main(int argc, char* argv[])
 
     wait_for_keypressed();
     
-    //Isolation of the grid
-    image_surface = Zoom(image_surface,320,1160,300,200,1060);
-    Zoomed = load_image("GridOnly.bmp");
-    update_surface(screen_surface,Black);
-    update_surface(screen_surface,Zoomed);
+    ZoomedRotate = rotozoomSurface(screen_surface,90,1,1);
+    SDL_SaveBMP(ZoomedRotate,"ZoomedRotate.bmp");
+    screen_surface = display_image(ZoomedRotate);
+    update_surface(screen_surface,ZoomedRotate);
     
+
     wait_for_keypressed();
 
-  /*  // Rotate image by 90 degrees
-    rotateMAN(90,image_surface);
-    Rotated = load_image("RotatedImage.bmp");
-    update_surface(screen_surface,Black);
-    update_surface(screen_surface,Rotated);
-    
-    wait_for_keypressed();
-*/
     SDL_FreeSurface(image_surface);
     SDL_FreeSurface(screen_surface);
 
