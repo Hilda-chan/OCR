@@ -3,6 +3,7 @@
 #include <err.h>
 
 
+
 int isAvailable(int puzzle[9][9], int row, int col, int num)
 {
     int start_row = (row/3) * 3;    //Define the starting row
@@ -56,51 +57,62 @@ int solveSudoku(int puzzle[9][9], int row, int col)
 }
 
 
-int FromCharToInt(char c)
-{
-    return  (int)(c - '0');
-
-}
 
 int FromFileToGrid(char* filename)
 {
-    int grid[9][9];
-    //int i = 0;
-    //int j = 0;
+    int  grid[9][9];
+    int i = 0;
+    int j = 0;
     FILE* inputfile = fopen(filename,"r");
     if (inputfile == NULL)
         errx(1,"inputfile null");
-    char c = fgetc(inputfile);
-    for(int i = 0 ; i< 9 ; i++)
+    char c;
+    
+    while((c = fgetc(inputfile)) != EOF)
     {
-        for(int j = 0;j<9;j++)
-        {
-            if(c == '\0' || c == '\n')
-                continue;
-            if(c== '.')
-                grid[i][j] = 0;
-            else
-                grid[i][j] = FromCharToInt(c);
-        }
-        if(c == '\0' || c == '\n')
+
+        if(c == '\n' || c == '\0')
             continue;
-
-        c=fgetc(inputfile);
+        if(j==9)
+        {
+            j=0;
+            i++;
+        }
+        if(c != '.')
+            grid[i][j] = (int)(c-'0');
+        else
+            grid[i][j] = 0;
+        j++;
     }
-
-
+    
+    for(int i = 0; i<9;i++)
+    {
+        for(int j = 0 ; j<9;j++)
+        {
+            printf("%d",grid[i][j]);
+        }
+        printf("\n");
+    }
     return grid[9][9];
-
 }
 
 int main(int argc,char *argv[])
 {
     if(argc != 2 )
         return 0;
-    int puzzle[9][9];
-    puzzle[9][9] = FromFileToGrid(argv[1]);
-    printf("AFTER PUZZLE");
-    if(solveSudoku(puzzle, 0, 0))
+    int test[9][9];    
+    test[9][9] = FromFileToGrid(argv[1]);
+    
+    for(int i = 0; i<9;i++)
+    {
+        for(int j = 0 ; j<9;j++)
+        {
+            printf("%d",test[i][j]);
+        }
+        printf("\n");
+    }
+    //printf("AFTER PUZZLE");
+    /*if(solveSudoku(puzzle, 0, 0))
     {
         printf("\n+-----+-----+-----+\n");
         for(int i=0; i<9; ++i)
@@ -113,7 +125,7 @@ int main(int argc,char *argv[])
             if (i%3 == 0) printf("+-----+-----+-----+\n");
         }
     }
-    else printf("\n\nNO SOLUTION\n\n");
+    else printf("\n\nNO SOLUTION\n\n");*/
 
     return 0;
 }
